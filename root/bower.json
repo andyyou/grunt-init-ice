@@ -1,0 +1,26 @@
+{
+  "name": "{%= name %}",
+  "description": "{%= description %}",
+  "version": "{%= version %}",
+  "authors": [
+    "{%= author_name %}"
+  ],
+  "license": "{%= licenses %}",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    "normalize-sass": "*",
+    "jquery": "~2.0.3",
+    "angular": "~1.0.8",
+    "bootstrap": "~3.0.1",
+    "modernizr": "~2.6.2"
+  }
+}
