@@ -4,5 +4,3 @@ node_js:
 before_script:
   - npm i grunt-cli grunt-init bower -g
   - bower i
-  - grunt-init ice
-  - grunt iniz

@@ -48,7 +48,7 @@ module.exports = (grunt) ->
         }]
       normalize:
         files:[
-          {'bower_components/normalize-sass/*.sass', 'css/normalize.css'}
+          {src: ['bower_components/normalize-sass/*.sass'], dest: 'css/normalize.css'}
         ]
     watch:
       static:
