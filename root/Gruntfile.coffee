@@ -3,10 +3,13 @@
 module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json'),
-    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %>' +
-            ':: <%= grunt.template.today("yyyy-mm-dd")\n' +
-            '** Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-            '** Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+    banner: "/*! <%= pkg.name %> - v<%= pkg.version %>" +
+            " <%= grunt.template.today('yyyy-mm-dd') %> \n" +
+            " Copyright (c) <%= grunt.template.today('yyyy') %> <%= pkg.author %>" +
+            " Licensed <%= pkg.licenses %> */ \n",
+    #============================================================================================================================
+    # Delete files                           
+    #============================================================================================================================
     clean:
       css:
         src: ['css/*.css']
@@ -16,17 +19,26 @@ module.exports = (grunt) ->
         src: ['js/*.js']
       dist:
         src: ['dist']
+    #============================================================================================================================
+    # Merge mutiple files in one                          
+    #============================================================================================================================
     concat:
       options: '<%= banner %>',
       stripBanners: true
       dist:
         'dist/css/<%= pkg.name %>.css': ['css/*.css'],
         'dist/js/<%= pkg.name %>.js': ['js/*.js']
+    #============================================================================================================================
+    # ON a server                        
+    #============================================================================================================================
     connect:
       server:
         options:
           port: 9001,
           base: './'
+    #============================================================================================================================
+    # Compile coffee script                          
+    #============================================================================================================================
     coffee:
       compile:
         files: [{
@@ -36,6 +48,9 @@ module.exports = (grunt) ->
           dest: 'js',
           ext: '.js'
         }]
+    #============================================================================================================================
+    # Compile sass file                        
+    #============================================================================================================================
     sass:
       options:
         style: 'expanded'
@@ -50,11 +65,17 @@ module.exports = (grunt) ->
         files:[
           {src: ['bower_components/normalize-sass/*.sass'], dest: 'css/normalize.css'}
         ]
+    #============================================================================================================================
+    # Run task when file changed                       
+    #============================================================================================================================
     watch:
       static:
         files: ['*.html'],
         options:
           livereload: true
+    #============================================================================================================================
+    # Just copy file                         
+    #============================================================================================================================
     copy:
       bootstrap:
         files:[
@@ -86,11 +107,17 @@ module.exports = (grunt) ->
     #============================================================================================================================
     # Compress and minify javascript                              
     #============================================================================================================================
-    # uglify:
-    #   options:
-    #     banner: '<%= banner %>'
-    #   dist:
-    #     'dest' : 'src'
+    uglify:
+    # dist:
+    #  'dest' : 'src'
+      options:
+        banner: '<%= banner %>',
+        mangle: false
+      # dist:
+      #   'dest' : 'src'
+      modernizr:
+        files:
+          'js/modernizr.min.js' : 'bower_components/modernizr/modernizr.js'
     #============================================================================================================================
     # TEST                                                        
     #============================================================================================================================
@@ -143,13 +170,14 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-sass')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-copy')
+  grunt.loadNpmTasks('grunt-contrib-uglify')
 
   # Comment plugins
-  # grunt.loadNpmTasks('grunt-contrib-uglify');
-  # grunt.loadNpmTasks('grunt-contrib-qunit');
-  # grunt.loadNpmTasks('grunt-contrib-jshint');
-  # grunt.loadNpmTasks('grunt-contrib-compass');
-  # grunt.loadNpmTasks('grunt-coffee-jshint');
+  
+  # grunt.loadNpmTasks('grunt-contrib-qunit')
+  # grunt.loadNpmTasks('grunt-contrib-jshint')
+  # grunt.loadNpmTasks('grunt-contrib-compass')
+  # grunt.loadNpmTasks('grunt-coffee-jshint')
 
   # *** Custom tasks ***
 
@@ -161,6 +189,7 @@ module.exports = (grunt) ->
   , [
       'clean:css', 'clean:js',
       'sass:normalize',
+      'uglify:modernizr',
       'copy:jquery', 'copy:bootstrap', 'copy:angular'
     ]
 
